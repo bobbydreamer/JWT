@@ -24,22 +24,30 @@ D:\BigData\14.Nodejs\16.JWT\helpers>node generate-token.js
 ```
 Update the tokens accordingly in .env file. 
 
-### Error codes
+### Testing execution flow
 
-There are 3 types of error codes 
-* TokenExpiredError
-  - Has only one message - 'jwt expired'
-* JsonWebTokenError
-  - This has multiple messages and giving out these messages as error might be a security hole. So we will just mention it as 'Unauthorized'
-    + 'jwt malformed'
-    + 'jwt signature is required'
-    + 'invalid signature'
-    + 'jwt audience invalid. expected: [OPTIONS AUDIENCE]'
-    + 'jwt issuer invalid. expected: [OPTIONS ISSUER]'
-    + 'jwt id invalid. expected: [OPTIONS JWT ID]'
-    + 'jwt subject invalid. expected: [OPTIONS SUBJECT]'
-* NotBeforeError
-  - Has only one message - 'jwt not active'
+Check the REST.http file which contains all the testing codes which can be tested from VSCode using REST client. 
 
-  ### Controller
+1. Open a empty Notepad 
+
+1. First try to go directly to `http://localhost:3000/` route, the one that doesn't have the authorization - You will get an error `Unauthorized`
+
+1. Click the Register route. You will get back accessToken and Refresh Token. Copy them both to notepad and recopy only the accessToken from NotePad or REST Client output windows in VSCode
+
+1. Update accessToken in the `http://localhost:3000/` with Authorization and try SEND REQUEST. You should do all this in 15 seconds otherwise JWT will be expired. To increase the expiry timing update `jwt_helper.js` It should work. 
+
+1. Wait for 10 seconds and Try again. You should get `jwt expired`
+
+1. Now copy the refresh token from Notepad (or) try running the login route. It should return the refreshToken, copy it and wait for few seconds. JWT should expire. 
+
+1. Paste the refresh token in the body of the Refresh Token route `http://localhost:3000/auth/refresh-token` and SEND REQUEST, it should generate a new accessToken. 
+
+
+### Overall learnings from this JWT exercise
+* JWT
+* Controller  
+
   All the functionalities shouldn't be in the route folder. It should be in the Controller folder. 
+* bcrypt 
+* NodeJS Error Handling
+* REST Client in VSCode
